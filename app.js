@@ -56,7 +56,8 @@ app.get('/ping', function (req,res) {
 })
 
 // Register services
-app.use('/v' + process.env.npm_package_version.toString().split('.')[0], api);
+// app.use('/v' + process.env.npm_package_version.toString().split('.')[0], api);
+app.use('/v1', api);
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
