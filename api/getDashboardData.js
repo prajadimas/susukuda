@@ -31,56 +31,44 @@ module.exports = function (req, res, next) {
           todayChannels.push(allChannels[i].channel);
         }
       }
-      if (todayChannels[0]) {
-        if (data.get(todayChannels[0])) {
-          for (var i = 0; i < todayChannels.length; i++) {
-            todayData.push(data.get(todayChannels[i]));
-          }
-          for (var i = 0; i < todayData.length; i++) {
-            for (var j = 0; j < todayData[i].length; j++) {
-              // console.log('Data ' + i + ':', todayData[i][j]);
-              dataTimestamp.push(todayData[i][j].timestamp);
-              result.byTimestamp.push({
-                timestamp: todayData[i][j].timestamp
-              })
-              for (var k = 0; k < todayData[i][j].iot2tangle[0].data.length; k++) {
-                result.byTimestamp[j][Object.keys(todayData[i][j].iot2tangle[0].data[k])[0]] = todayData[i][j].iot2tangle[0].data[k][Object.keys(todayData[i][j].iot2tangle[0].data[k])[0]];
-                dataProp.push(Object.keys(todayData[i][j].iot2tangle[0].data[k])[0]);
-              }
-            }
-          }
-          uniqueDataProp = [...new Set(dataProp)];
-          for (var i = 0; i < uniqueDataProp.length; i++) {
-            result.byProp[uniqueDataProp[i]] = {
-              x: [],
-              y: []
-            };
-          }
-          for (var i = 0; i < result.byTimestamp.length; i++) {
-            for (var j = 0; j < uniqueDataProp.length; j++) {
-              result.byProp[uniqueDataProp[j]]['x'].push(result.byTimestamp[i]['timestamp'])
-              result.byProp[uniqueDataProp[j]]['y'].push(result.byTimestamp[i][uniqueDataProp[j]]);
-            }
-          }
-          console.log('Timestamp: ', dataTimestamp);
-          // console.log('Data Prop: ', uniqueDataProp);
-          console.log('Result: ', result);
-          res.status(200).json({
-            status: 'Success',
-            data: result
-          });
-        } else {
-          res.status(200).json({
-            status: 'Success',
-            data: result
-          });
+      for (var i = 0; i < todayChannels.length; i++) {
+        if (data.get(todayChannels[i])) {
+          todayData.push(data.get(todayChannels[i]));
         }
-      } else {
-        res.status(200).json({
-          status: 'Success',
-          data: result
-        });
       }
+      for (var i = 0; i < todayData.length; i++) {
+        for (var j = 0; j < todayData[i].length; j++) {
+          // console.log('Data ' + i + ':', todayData[i][j]);
+          dataTimestamp.push(todayData[i][j].timestamp);
+          result.byTimestamp.push({
+            timestamp: todayData[i][j].timestamp
+          })
+          for (var k = 0; k < todayData[i][j].iot2tangle[0].data.length; k++) {
+            result.byTimestamp[j][Object.keys(todayData[i][j].iot2tangle[0].data[k])[0]] = todayData[i][j].iot2tangle[0].data[k][Object.keys(todayData[i][j].iot2tangle[0].data[k])[0]];
+            dataProp.push(Object.keys(todayData[i][j].iot2tangle[0].data[k])[0]);
+          }
+        }
+      }
+      uniqueDataProp = [...new Set(dataProp)];
+      for (var i = 0; i < uniqueDataProp.length; i++) {
+        result.byProp[uniqueDataProp[i]] = {
+          x: [],
+          y: []
+        };
+      }
+      for (var i = 0; i < result.byTimestamp.length; i++) {
+        for (var j = 0; j < uniqueDataProp.length; j++) {
+          result.byProp[uniqueDataProp[j]]['x'].push(result.byTimestamp[i]['timestamp'])
+          result.byProp[uniqueDataProp[j]]['y'].push(result.byTimestamp[i][uniqueDataProp[j]]);
+        }
+      }
+      console.log('Timestamp: ', dataTimestamp);
+      // console.log('Data Prop: ', uniqueDataProp);
+      console.log('Result: ', result);
+      res.status(200).json({
+        status: 'Success',
+        data: result
+      });
     } else {
       res.status(200).json({
         status: 'Success',
