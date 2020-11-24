@@ -85,32 +85,34 @@ app.use(function (err, req, res, next) {
 
 module.exports = app;
 
-cron.schedule('31 */1 * * *', () => {
-  var allChannels = store.get('channel');
-  var todayChannels = []
-  console.log('All Channel: ', store.get('channel'));
-  for (var i = 0; i < allChannels.length; i++) {
-    if (allChannels[i].date === moment(new Date()).tz('Asia/Jakarta').format('DD/MM/YYYY')) {
-      todayChannels.push(allChannels[i].channel);
-    }
-  }
-  var countChannelToday = -1;
-  var nextChannel = async function () {
-    try {
-      if (countChannelToday < (todayChannels.length - 1)) {
-        countChannelToday++
-        // console.log('Retrieving Data...');
-        // await retrieveIoT2TangleData(allChannels[countChannelToday].channel);
-        const child = spawn('node', ['index.js', allChannels[countChannelToday].channel], {
-          detached: true,
-          stdio: 'ignore'
-        });
-        child.unref();
-        nextChannel();
+cron.schedule('0 */1 * * *', () => {
+  if (store.get('channel')) {
+    var allChannels = store.get('channel');
+    var todayChannels = []
+    console.log('All Channel: ', store.get('channel'));
+    for (var i = 0; i < allChannels.length; i++) {
+      if (allChannels[i].date === moment(new Date()).tz('Asia/Jakarta').format('DD/MM/YYYY')) {
+        todayChannels.push(allChannels[i].channel);
       }
-    } catch (err) {
-      console.error(err);
     }
+    var countChannelToday = -1;
+    var nextChannel = async function () {
+      try {
+        if (countChannelToday < (todayChannels.length - 1)) {
+          countChannelToday++
+          // console.log('Retrieving Data...');
+          // await retrieveIoT2TangleData(allChannels[countChannelToday].channel);
+          const child = spawn('node', ['index.js', allChannels[countChannelToday].channel], {
+            detached: true,
+            stdio: 'ignore'
+          });
+          child.unref();
+          nextChannel();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    nextChannel();
   }
-  nextChannel();
 });
