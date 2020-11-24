@@ -62,9 +62,9 @@ module.exports = function (req, res, next) {
               result.byProp[uniqueDataProp[j]]['y'].push(result.byTimestamp[i][uniqueDataProp[j]]);
             }
           }
-          // console.log('Timestamp: ', dataTimestamp);
+          console.log('Timestamp: ', dataTimestamp);
           // console.log('Data Prop: ', uniqueDataProp);
-          // console.log('Result: ', result);
+          console.log('Result: ', result);
           res.status(200).json({
             status: 'Success',
             data: result
