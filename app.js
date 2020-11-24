@@ -117,3 +117,29 @@ cron.schedule('0 */1 * * *', () => {
     nextChannel();
   }
 });
+
+cron.schedule('30 */1 * * *', () => {
+  if (store.get('channel')) {
+    var allChannels = store.get('channel');
+    var todayChannels = []
+    console.log('All Channel: ', store.get('channel'));
+    for (var i = 0; i < allChannels.length; i++) {
+      if (allChannels[i].date === moment(new Date()).tz('Asia/Jakarta').format('DD/MM/YYYY')) {
+        todayChannels.push(allChannels[i].channel);
+      }
+    }
+    var countChannelToday = -1;
+    var nextChannel = async function () {
+      try {
+        if (countChannelToday < (todayChannels.length - 1)) {
+          countChannelToday++
+          console.log('Retrieving Data...');
+          await retrieveIoT2TangleData(allChannels[countChannelToday].channel);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    nextChannel();
+  }
+});
