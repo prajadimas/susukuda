@@ -101,7 +101,7 @@ cron.schedule('0 */1 * * *', () => {
       try {
         if (countChannelToday < (todayChannels.length - 1)) {
           countChannelToday++
-          // console.log('Retrieving Data...');
+          console.log('Retrieving Data...');
           // await retrieveIoT2TangleData(allChannels[countChannelToday].channel);
           const child = spawn('node', ['index.js', allChannels[countChannelToday].channel], {
             detached: true,

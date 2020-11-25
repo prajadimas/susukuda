@@ -31,11 +31,14 @@ module.exports = function (req, res, next) {
           todayChannels.push(allChannels[i].channel);
         }
       }
+      console.log('Today Channel: ', todayChannels);
       for (var i = 0; i < todayChannels.length; i++) {
+        console.log('Today Data [' + i + ']: ', data.get(todayChannels[i]));
         if (data.get(todayChannels[i])) {
           todayData.push(data.get(todayChannels[i]));
         }
       }
+      console.log('Today Data: ', todayData);
       for (var i = 0; i < todayData.length; i++) {
         for (var j = 0; j < todayData[i].length; j++) {
           // console.log('Data ' + i + ':', todayData[i][j]);
