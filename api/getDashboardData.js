@@ -33,7 +33,7 @@ module.exports = function (req, res, next) {
       }
       console.log('Today Channel: ', todayChannels);
       for (var i = 0; i < todayChannels.length; i++) {
-        console.log('Today Data [' + i + ']: ', data.get(todayChannels[i]));
+        // console.log('Today Data [' + i + ']: ', data.get(todayChannels[i]));
         if (data.get(todayChannels[i])) {
           todayData.push(data.get(todayChannels[i]));
         }
